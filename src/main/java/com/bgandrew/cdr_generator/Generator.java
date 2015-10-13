@@ -4,13 +4,14 @@ package com.bgandrew.cdr_generator;
 import com.bgandrew.cdr_generator.model.CITY;
 import com.google.gson.reflect.TypeToken; 
 import com.google.gson.Gson;
-
+import com.bgandrew.cdr_generator.model.Constants;
 import com.bgandrew.cdr_generator.model.Customer;
 import com.bgandrew.cdr_generator.model.Location;
 import com.bgandrew.cdr_generator.model.LocationSet;
 import com.bgandrew.cdr_generator.utils.Utils;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,7 +32,12 @@ import java.util.Map;
  */
 public class Generator {
    
-    private final static String CSV_HEADER = "timestamp;caller MSISDN;caller IMEI;caller IMSI;caller latitude; caller longitude;recipient MSISDN;recipient IMEI;recipient IMSI;recipient latitude;recipient longitude;type,duration;length"; 
+    private final static String[] CSV_HEADER = {
+    	"timestamp", "caller MSISDN", "caller IMEI", "caller IMSI",
+    	"caller latitude", "caller longitude", "recipient MSISDN",
+    	"recipient IMEI", "recipient IMSI", "recipient latitude",
+    	"recipient longitude", "type", "duration", "length" 
+    };
     
     private final static String DEVICES_LIST = "devices.json";
     private final static String OUTPUT_FILE = "data.csv";
@@ -107,7 +113,7 @@ public class Generator {
                         Utils.pickRandomElement(works.get(city)),
                         Utils.pickRandomElement(others.get(city)));
                 
-                customers.add(Customer.generatePhone(start_time, locationSet));
+                customers.add(Customer.generateCustomer(start_time, locationSet));
             }
         }
         
@@ -116,12 +122,18 @@ public class Generator {
         customers.sort(null);
         
         
+
         try (PrintWriter writer = new PrintWriter(new FileWriter(OUTPUT_FILE, true))) {
             if (Files.size(Paths.get(OUTPUT_FILE)) == 0) {
-                writer.println(CSV_HEADER);
+        	StringBuilder sb = new StringBuilder(CSV_HEADER[0]);
+                for(int i = 1; i < CSV_HEADER.length; i++){
+                    sb.append(Constants.DELIMITER).append(CSV_HEADER[i]);
+                }
+        	writer.println(sb);
             }
-            
-            
+   
+        	
+
             Customer customer1;
             Customer customer2;
             
@@ -139,7 +151,7 @@ public class Generator {
                 Customer.CallType type = Utils.generateCallType();
                 int duration;
                 int length;
-                if (type == Customer.CallType.Voice) {
+                if (type == Customer.CallType.call) {
                     length = 0;
                     duration = Utils.generateDuration();
                 } else {

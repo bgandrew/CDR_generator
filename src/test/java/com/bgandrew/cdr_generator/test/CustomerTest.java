@@ -57,10 +57,10 @@ public class CustomerTest {
                         Utils.randomLocationInCity(city),
                         Utils.randomLocationInCity(city));
         
-        Customer customer1 = Customer.generatePhone(LocalDateTime.now(), set1);
-        Customer customer2 = Customer.generatePhone(LocalDateTime.now(), set2);
+        Customer customer1 = Customer.generateCustomer(LocalDateTime.now(), set1);
+        Customer customer2 = Customer.generateCustomer(LocalDateTime.now(), set2);
         
-        customer1.call(customer2, Customer.CallType.Voice, 100, 0);
+        customer1.call(customer2, Customer.CallType.call, 100, 0);
         
         List<Customer> customers = Arrays.asList(customer1, customer2);
         

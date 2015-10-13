@@ -14,8 +14,8 @@ import java.util.Random;
 public class Customer implements Comparable<Customer> {
     
     public static enum CallType {
-        Voice,
-        SMS
+        call,
+        sms
     }
     
     @Expose
@@ -65,7 +65,7 @@ public class Customer implements Comparable<Customer> {
     }
     
     // TODO convert to Builder
-    public static Customer generatePhone (LocalDateTime startTime, LocationSet locationSet) {
+    public static Customer generateCustomer (LocalDateTime startTime, LocationSet locationSet) {
         return new Customer (Utils.generateMSISDN(locationSet.city), Utils.generateIMSI(), Utils.generateIMSI(), generateActivityValue(), startTime, locationSet);
        
     }
