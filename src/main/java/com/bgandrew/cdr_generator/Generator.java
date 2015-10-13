@@ -1,17 +1,18 @@
 package com.bgandrew.cdr_generator;
 
 
+import com.bgandrew.cdr_generator.model.CITY;
 import com.google.gson.reflect.TypeToken; 
 import com.google.gson.Gson;
 
 import com.bgandrew.cdr_generator.model.Customer;
 import com.bgandrew.cdr_generator.model.Location;
 import com.bgandrew.cdr_generator.model.LocationSet;
-import com.bgandrew.cdr_generator.model.LocationSet.CITY;
 import com.bgandrew.cdr_generator.utils.Utils;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -49,8 +50,8 @@ public class Generator {
         
         long starttime = System.nanoTime();
         
-        int numberOfCalls = (int)1e7;
-        int numberOfDevices = 1000;
+        int numberOfCalls = (int)20;
+        int numberOfDevices = 2;
         boolean doExport = false;
         boolean doImport = false;
         if (args.length > 0) {
@@ -115,8 +116,10 @@ public class Generator {
         customers.sort(null);
         
         
-        try (PrintWriter writer = new PrintWriter(OUTPUT_FILE, "UTF-8")) {
-            writer.println(CSV_HEADER);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(OUTPUT_FILE, true))) {
+            if (Files.size(Paths.get(OUTPUT_FILE)) == 0) {
+                writer.println(CSV_HEADER);
+            }
             
             
             Customer customer1;
@@ -152,7 +155,9 @@ public class Generator {
             System.out.println("Could not create the file");
         } catch (UnsupportedEncodingException uee) {
             System.out.println("Unsupported encoding exception");
-        } 
+        } catch (IOException ioe) {
+            System.out.println("Error writing to file");    
+        }
         
         if (doExport) {
             try (PrintWriter writer = new PrintWriter(DEVICES_LIST, "UTF-8")) {

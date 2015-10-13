@@ -60,7 +60,7 @@ public class Customer implements Comparable<Customer> {
         this.locationSet = locationSet;  
         lastCallTime = startTime;
         
-        location = Utils.CITY_LOCATIONS.get(locationSet.city); // initial value, just in case
+        location = locationSet.city.location; // initial value, just in case
         
     }
     
@@ -167,6 +167,10 @@ public class Customer implements Comparable<Customer> {
     
     public Location getLocation(){
         return location;
+    }
+    
+    public LocationSet getLocationSet() {
+        return locationSet;
     }
     
     

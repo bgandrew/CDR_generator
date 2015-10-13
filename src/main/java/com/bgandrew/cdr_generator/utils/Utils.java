@@ -1,8 +1,8 @@
 package com.bgandrew.cdr_generator.utils;
 
+import com.bgandrew.cdr_generator.model.CITY;
 import com.bgandrew.cdr_generator.model.Customer;
 import com.bgandrew.cdr_generator.model.Location;
-import static com.bgandrew.cdr_generator.model.LocationSet.CITY;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,27 +82,6 @@ public class Utils {
     
     
     private static final double CITY_RADIUS = 0.1; // about 11 kilometers
-    public static final Map<CITY, Location> CITY_LOCATIONS;
-    
-        // Los Angeles codes
-    public static Map<CITY,List<String>> USA_NDCs;
-    
-    static {
-        Map<CITY, Location> locations = new HashMap<>();
-        locations.put(CITY.LA, new Location(33.938234, -118.106140));
-        locations.put(CITY.SD, new Location(32.799612, -117.140673));
-        locations.put(CITY.SJ, new Location(37.317485, -121.893148));
-        CITY_LOCATIONS = Collections.unmodifiableMap(locations);
-        
-        Map<CITY,List<String>> ndcs = new HashMap<>();
-        ndcs.put(CITY.LA, Collections.unmodifiableList(Arrays.asList(
-                            "213", "310", "323",
-                            "424", "626", "818",
-                            "661","747")));
-        ndcs.put(CITY.SD,  Collections.unmodifiableList(Arrays.asList("619","858")));
-        ndcs.put(CITY.SJ,  Collections.unmodifiableList(Arrays.asList("408")));
-        USA_NDCs = Collections.unmodifiableMap(ndcs);
-    }
 
     
     private static String randomNDigitsNumber (int n) {
@@ -150,7 +129,7 @@ public class Utils {
     }
     
     public static long generateMSISDN(CITY city) {
-        return Long.decode(USA_CC + pickRandomElement(USA_NDCs.get(city)) + randomNDigitsNumber(7));
+        return Long.decode(USA_CC + pickRandomElement(city.ndcs) + randomNDigitsNumber(7));
         
     }
     
@@ -179,7 +158,7 @@ public class Utils {
     } 
     
     public static Location randomLocationInCity(CITY city){
-        return randomLocationInArea(CITY_LOCATIONS.get(city), CITY_RADIUS);
+        return randomLocationInArea(city.location, CITY_RADIUS);
     } 
     
     public static CITY randomCity() {

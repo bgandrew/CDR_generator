@@ -1,22 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bgandrew.cdr_generator.model;
+
+import java.util.Objects;
 
 /**
  *
- *  Represents set of location (home, work, somewhere else) where a customer can appear.
+ *  Represents set of locations (home, work, somewhere else) where a customer can appear.
  */
 public class LocationSet {
-    
-    // list of  supported cities
-    public enum CITY {
-        LA, // Los Angeles
-        SD, // San Diego
-        SJ  // San Jose
-    }
     
     public final CITY city;
     public final Location home;
@@ -34,6 +24,31 @@ public class LocationSet {
     public String toString() {
         return "LocationSet{" + "city=" + city + ", home=" + home + ", work=" + work + ", other=" + other + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.city);
+        hash = 31 * hash + Objects.hashCode(this.home);
+        hash = 31 * hash + Objects.hashCode(this.work);
+        hash = 31 * hash + Objects.hashCode(this.other);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LocationSet arg = (LocationSet) obj;
+        
+        return city.equals(arg.city) && home.equals(arg.home) 
+            && work.equals(arg.work)&&other.equals(arg.other);
+    }
+    
     
     
     
