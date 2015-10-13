@@ -50,8 +50,8 @@ public class Generator {
         
         long starttime = System.nanoTime();
         
-        int numberOfCalls = (int)20;
-        int numberOfDevices = 2;
+        int numberOfCalls = (int)1e7;
+        int numberOfDevices = (int)1e3;
         boolean doExport = false;
         boolean doImport = false;
         if (args.length > 0) {
