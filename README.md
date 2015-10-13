@@ -1,4 +1,5 @@
-Usage : java -jar CDR_generator.jar -d <devices number> (optional, default value is 1000)  -c <calls per device> (optional. default value is 10000) -export(optional - makes program to store devices list in devices.json file) -import (optional - will cause program to load devices from devices.json file)
+Usage : java -jar CDR_generator.jar -d <number of devices> (optional, default value is 1000)  -c <number of calls> (optional. default value is 10000000) -export(optional - makes program to store devices list in devices.json file) -import (optional - will cause program to load devices from devices.json file)
 
-This will generate data.csv file in the same directory as a jar file with records for <device number> of devises each making <calls per device> number of calls.
-For example, device "java -jar CDR_generator.jar -d 10 -c 10" will generate small file with 100 records (for test purposes). "java -jar CDR_generator.jar" generates a file with 10 million records.
+This will generate data.csv file in the same directory as a jar file with specified number of call records. A caller and recipient of each call are chosen randomly across specified number of generated devices. For example, "java -jar CDR_generator.jar -d 10 -c 100" will generate small file with about 100 records (for test purposes). "java -jar CDR_generator.jar" generates a file with 10 million records.
+
+When running with -import option, be sure that devices.json file exists (to generate it just run the program with -export option), otherwise it won't work.
