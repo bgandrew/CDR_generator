@@ -7,7 +7,7 @@ package com.bgandrew.cdr_generator.test;
 
 import com.bgandrew.cdr_generator.model.CITY;
 import com.bgandrew.cdr_generator.model.Customer;
-import com.bgandrew.cdr_generator.model.LocationSet;
+import com.bgandrew.cdr_generator.model.BTSSet;
 import com.bgandrew.cdr_generator.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,14 +48,14 @@ public class CustomerTest {
     public void testImportExport() {
         System.out.println("begin testing of import/export");
         CITY city = Utils.randomCity();
-        LocationSet set1 = new LocationSet(city,
-                        Utils.randomLocationInCity(city),
-                        Utils.randomLocationInCity(city),
-                        Utils.randomLocationInCity(city));
-        LocationSet set2 = new LocationSet(city,
-                        Utils.randomLocationInCity(city),
-                        Utils.randomLocationInCity(city),
-                        Utils.randomLocationInCity(city));
+        BTSSet set1 = new BTSSet(city,
+                        city.defaultBTS,
+                        city.defaultBTS,
+                        city.defaultBTS);
+        BTSSet set2 = new BTSSet(city,
+                        city.defaultBTS,
+                        city.defaultBTS,
+                        city.defaultBTS);
         
         Customer customer1 = Customer.generateCustomer(LocalDateTime.now(), set1);
         Customer customer2 = Customer.generateCustomer(LocalDateTime.now(), set2);

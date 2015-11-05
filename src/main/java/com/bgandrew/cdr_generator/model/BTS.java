@@ -2,16 +2,19 @@ package com.bgandrew.cdr_generator.model;
 
 /**
  *
- * simple value class for location
+ * simple value class for BTS
  */
-public class Location {
+public class BTS {
    
     public final double longitude;
     public final double latitude;
     
-    public Location (double latitude, double longitude) {
+    public final int cellID;
+    
+    public BTS (double latitude, double longitude, int cellID) {
         this.latitude = latitude;
         this.longitude = longitude;
+        this.cellID = cellID;
     } 
     
     @Override
@@ -35,7 +38,7 @@ public class Location {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Location other = (Location) obj;
+        final BTS other = (BTS) obj;
         if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.longitude)) {
             return false;
         }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 /** This class represents a customer from it's device perspective. It's used to control call times, 
- *  location and level of customer's activity. 
+  currentBTS and level of customer's activity. 
  *
  */
 
@@ -26,10 +26,10 @@ public class Customer implements Comparable<Customer> {
     private final long IMSI;
     
     
-    private Location location;
+    private BTS currentBTS;
     
     // set of home , work and other locations 
-    private final LocationSet locationSet;
+    private final BTSSet btsSet;
     
     
     
@@ -49,23 +49,23 @@ public class Customer implements Comparable<Customer> {
         IMSI = 0;
         activity = 0;
         lastCallTime = LocalDateTime.MIN;
-        locationSet = null;
+        btsSet = null;
     }
     
-    private Customer(long MSISDN, long IMEI, long IMSI, int activity, LocalDateTime startTime, LocationSet locationSet) {
+    private Customer(long MSISDN, long IMEI, long IMSI, int activity, LocalDateTime startTime, BTSSet locationSet) {
         this.IMEI = IMEI;
         this.MSISDN = MSISDN;
         this.IMSI = IMSI;
         this.activity = activity;
-        this.locationSet = locationSet;  
+        this.btsSet = locationSet;  
         lastCallTime = startTime;
         
-        location = locationSet.city.location; // initial value, just in case
+        currentBTS = locationSet.city.defaultBTS; // initial value, just in case
         
     }
     
     // TODO convert to Builder
-    public static Customer generateCustomer (LocalDateTime startTime, LocationSet locationSet) {
+    public static Customer generateCustomer (LocalDateTime startTime, BTSSet locationSet) {
         return new Customer (Utils.generateMSISDN(locationSet.city), Utils.generateIMSI(), Utils.generateIMSI(), generateActivityValue(), startTime, locationSet);
        
     }
@@ -108,36 +108,36 @@ public class Customer implements Comparable<Customer> {
     
     
     private void updateCallLocation(LocalDateTime time) {
-        // generate random location to avoid determenistic behavior
-        Location newLocation = Utils.randomLocationInCity(locationSet.city);
+        // generate random currentBTS to avoid determenistic behavior
+        BTS newLocation = btsSet.city.defaultBTS;
         
         final int hour = time.getHour();
         final DayOfWeek day = time.getDayOfWeek();
         
         if (hour < 8 || hour > 20) {
             // almost certainly at home
-            if (Utils.trueWithProbability(0.99f)) newLocation = locationSet.home;
+            if (Utils.trueWithProbability(0.99f)) newLocation = btsSet.home;
         } else  if (hour > 10 && hour < 19) {            
             if (day.compareTo(DayOfWeek.SATURDAY) <0) { // working day
                 // almost certainly at work
-                if (Utils.trueWithProbability(0.99f)) newLocation = locationSet.work;
+                if (Utils.trueWithProbability(0.99f)) newLocation = btsSet.work;
             } else { // weekend
                 if (Utils.trueWithProbability(0.6f)) {
                     // having fun in some other place
-                    newLocation = locationSet.other;
+                    newLocation = btsSet.other;
                 } else if (Utils.trueWithProbability(0.4f)) {
                     //or at home
-                    newLocation = locationSet.home;
+                    newLocation = btsSet.home;
                 }
             }
         } else { // 8-10 or 19-20
             if (Utils.trueWithProbability(0.5f)) {
                 // either on the way, or in "other" place
-                newLocation = locationSet.other;
+                newLocation = btsSet.other;
             }
         }
         
-        location = newLocation;
+        currentBTS = newLocation;
     }
         
     
@@ -165,12 +165,12 @@ public class Customer implements Comparable<Customer> {
         return activity;
     }
     
-    public Location getLocation(){
-        return location;
+    public BTS getBTS(){
+        return currentBTS;
     }
     
-    public LocationSet getLocationSet() {
-        return locationSet;
+    public BTSSet getLocationSet() {
+        return btsSet;
     }
     
     
@@ -211,7 +211,7 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public String toString() {
-        return "Customer{" + "IMEI=" + IMEI + ", MSISDN=" + MSISDN + ", IMSI=" + IMSI + ", location=" + location + ", locationSet=" + locationSet + ", activity=" + activity + ", lastCallTime=" + lastCallTime + ", numberOfCalls=" + numberOfCalls + '}';
+        return "Customer{" + "IMEI=" + IMEI + ", MSISDN=" + MSISDN + ", IMSI=" + IMSI + ", location=" + currentBTS + ", locationSet=" + btsSet + ", activity=" + activity + ", lastCallTime=" + lastCallTime + ", numberOfCalls=" + numberOfCalls + '}';
     }
 
     

@@ -6,14 +6,14 @@ import java.util.Objects;
  *
  *  Represents set of locations (home, work, somewhere else) where a customer can appear.
  */
-public class LocationSet {
+public class BTSSet {
     
     public final CITY city;
-    public final Location home;
-    public final Location  work;
-    public final Location other;
+    public final BTS home;
+    public final BTS  work;
+    public final BTS other;
     
-    public LocationSet(CITY city, Location home, Location work, Location other) {
+    public BTSSet(CITY city, BTS home, BTS work, BTS other) {
         this.city = city;
         this.home = home;
         this.work = work;
@@ -43,7 +43,7 @@ public class LocationSet {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LocationSet arg = (LocationSet) obj;
+        final BTSSet arg = (BTSSet) obj;
         
         return city.equals(arg.city) && home.equals(arg.home) 
             && work.equals(arg.work)&&other.equals(arg.other);

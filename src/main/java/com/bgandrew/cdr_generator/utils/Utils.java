@@ -2,7 +2,7 @@ package com.bgandrew.cdr_generator.utils;
 
 import com.bgandrew.cdr_generator.model.CITY;
 import com.bgandrew.cdr_generator.model.Customer;
-import com.bgandrew.cdr_generator.model.Location;
+import com.bgandrew.cdr_generator.model.BTS;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -81,7 +81,6 @@ public class Utils {
     
     
     
-    private static final double CITY_RADIUS = 0.1; // about 11 kilometers
 
     
     private static String randomNDigitsNumber (int n) {
@@ -145,7 +144,7 @@ public class Utils {
         return 40 + (random.nextInt(30) -15);
     }
     
-    private static Location randomLocationInArea(Location center, double radius) {
+   /* private static BTS randomLocationInArea(BTS center, double radius) {
         //using polar coordinates to generate random point in a circle
 
         double r = radius * Math.sqrt(random.nextDouble());
@@ -154,30 +153,32 @@ public class Utils {
         double x = r*Math.cos(f);
         double y = r*Math.sin(f);
         
-        return new Location(center.latitude + x, center.longitude + y);
+        return new BTS(center.latitude + x, center.longitude + y);
     } 
     
-    public static Location randomLocationInCity(CITY city){
-        return randomLocationInArea(city.location, CITY_RADIUS);
-    } 
+    //public static BTS randomLocationInCity(CITY city){
+     //   return randomLocationInArea(city.location, CITY_RADIUS);
+   // } 
+    
+    */
     
     public static CITY randomCity() {
         return pickRandomElement(Arrays.asList(CITY.values()));
     }
     
         
-    public static Map<CITY,List<Location>> generateLocationMap(int numberOfLocations) {
+    /*public static Map<CITY,List<BTS>> generateBTSMap(int numberOfLocations) {
         
         if (numberOfLocations < 1)
             numberOfLocations = 1;
                 
-        Map<CITY,List<Location>> map = new HashMap<>();
+        Map<CITY,List<BTS>> map = new HashMap<>();
         // this is workaround
-        // we need to be sure that at least one location in each city exists
+        // we need to be sure that at least one bts in each city exists
         // otherwise the program can crash with exception 
         for (CITY city : CITY.values()) {
 
-            ArrayList<Location> list = new ArrayList<>();
+            ArrayList<BTS> list = new ArrayList<>();
             list.add(randomLocationInCity(city));
             map.put(city, list);
         }
@@ -188,7 +189,7 @@ public class Utils {
         }
         
         return map;
-    }
+    }*/
     
     // return true with probapability p (if p > 1 always true, if p < 0 always false)
     public static boolean trueWithProbability(float p) {
