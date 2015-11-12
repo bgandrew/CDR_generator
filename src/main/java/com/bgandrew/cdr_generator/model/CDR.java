@@ -41,6 +41,7 @@ public class CDR {
            append(caller.getMSISDN()).append(Constants.DELIMITER).
            append(caller.getIMEI()).append(Constants.DELIMITER).
            append(caller.getIMSI()).append(Constants.DELIMITER).
+           append(caller.getBTS().LAC).append(Constants.DELIMITER).
            append(caller.getBTS().cellID).append(Constants.DELIMITER).
            append(caller.getBTS().latitude).append(Constants.DELIMITER).
            append(caller.getBTS().longitude).append(Constants.DELIMITER).
@@ -48,6 +49,7 @@ public class CDR {
            append(recipient.getMSISDN()).append(Constants.DELIMITER).
            append(recipient.getIMEI()).append(Constants.DELIMITER).
            append(recipient.getIMSI()).append(Constants.DELIMITER).
+           append(recipient.getBTS().LAC).append(Constants.DELIMITER).
            append(recipient.getBTS().cellID).append(Constants.DELIMITER).
            append(recipient.getBTS().latitude).append(Constants.DELIMITER).
            append(recipient.getBTS().longitude).append(Constants.DELIMITER).

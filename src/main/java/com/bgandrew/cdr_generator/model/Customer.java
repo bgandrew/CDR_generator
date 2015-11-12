@@ -1,6 +1,5 @@
 package com.bgandrew.cdr_generator.model;
 
-import com.google.gson.annotations.Expose;
 import com.bgandrew.cdr_generator.utils.Utils;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -18,12 +17,9 @@ public class Customer implements Comparable<Customer> {
         sms
     }
     
-    @Expose
-    private final long IMEI;
-    @Expose
-    private final long MSISDN;
-    @Expose
-    private final long IMSI;
+    private final String IMEI;
+    private final String MSISDN;
+    private final String MSIN;
     
     
     private BTS currentBTS;
@@ -31,9 +27,6 @@ public class Customer implements Comparable<Customer> {
     // set of home , work and other locations 
     private final BTSSet btsSet;
     
-    
-    
-    @Expose
     private int activity = 0; 
     
     private LocalDateTime lastCallTime = LocalDateTime.MIN; // TODO set start date somewhere in configs
@@ -44,18 +37,18 @@ public class Customer implements Comparable<Customer> {
     
     
     public Customer() {
-        IMEI = 0;
-        MSISDN = 0;
-        IMSI = 0;
+        IMEI = "0";
+        MSISDN = "0";
+        MSIN = "0";
         activity = 0;
         lastCallTime = LocalDateTime.MIN;
         btsSet = null;
     }
     
-    private Customer(long MSISDN, long IMEI, long IMSI, int activity, LocalDateTime startTime, BTSSet locationSet) {
+    private Customer(String MSISDN, String IMEI, String MSIN, int activity, LocalDateTime startTime, BTSSet locationSet) {
         this.IMEI = IMEI;
         this.MSISDN = MSISDN;
-        this.IMSI = IMSI;
+        this.MSIN = MSIN;
         this.activity = activity;
         this.btsSet = locationSet;  
         lastCallTime = startTime;
@@ -66,7 +59,7 @@ public class Customer implements Comparable<Customer> {
     
     // TODO convert to Builder
     public static Customer generateCustomer (LocalDateTime startTime, BTSSet locationSet) {
-        return new Customer (Utils.generateMSISDN(locationSet.city), Utils.generateIMSI(), Utils.generateIMSI(), generateActivityValue(), startTime, locationSet);
+        return new Customer (Utils.generateMSISDN(locationSet.city), Utils.generateIMEI(), Utils.generateMSIN(), generateActivityValue(), startTime, locationSet);
        
     }
    
@@ -108,8 +101,8 @@ public class Customer implements Comparable<Customer> {
     
     
     private void updateCallLocation(LocalDateTime time) {
-        // generate random currentBTS to avoid determenistic behavior
-        BTS newLocation = btsSet.city.defaultBTS;
+        
+        BTS newLocation = btsSet.other;
         
         final int hour = time.getHour();
         final DayOfWeek day = time.getDayOfWeek();
@@ -141,16 +134,20 @@ public class Customer implements Comparable<Customer> {
     }
         
     
-    public long getIMEI() {
+    public String getIMEI() {
         return IMEI;
     }
 
-    public long getMSISDN() {
+    public String getMSISDN() {
         return MSISDN;
     }
 
-    public long getIMSI() {
-        return IMSI;
+    public String getIMSI() {
+        // MCC + MNS + MSIN
+        return new StringBuilder()
+                .append(currentBTS.MCC)
+                .append(currentBTS.MNS)
+                .append(MSIN).toString();
     }
     
     public LocalDateTime getLastCallTime() {
@@ -211,7 +208,7 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public String toString() {
-        return "Customer{" + "IMEI=" + IMEI + ", MSISDN=" + MSISDN + ", IMSI=" + IMSI + ", location=" + currentBTS + ", locationSet=" + btsSet + ", activity=" + activity + ", lastCallTime=" + lastCallTime + ", numberOfCalls=" + numberOfCalls + '}';
+        return "Customer{" + "IMEI=" + IMEI + ", MSISDN=" + MSISDN + ", IMSI=" + MSIN + ", location=" + currentBTS + ", locationSet=" + btsSet + ", activity=" + activity + ", lastCallTime=" + lastCallTime + ", numberOfCalls=" + numberOfCalls + '}';
     }
 
     

@@ -32,7 +32,7 @@ public enum CITY {
         this.latitude = latitude;
         this.longitude = longitude;
         this.ndcs = Collections.unmodifiableList(ndcs);
-        this.defaultBTS = new BTS(latitude, longitude, 0);
+        this.defaultBTS = new BTS(latitude, longitude, 0,0,0,0);
     }
     
     public boolean contains(BTS bts) {

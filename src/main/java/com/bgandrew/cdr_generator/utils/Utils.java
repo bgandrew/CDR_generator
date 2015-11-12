@@ -116,19 +116,20 @@ public class Utils {
     }
     
     
-    public static long generateIMSI() {
-        return Long.decode(USA_MCC + pickRandomElement(USA_MNSs) + randomNDigitsNumber(10));
+    // need to store it as String since it can start with 0;
+    public static String generateMSIN() {
+        return randomNDigitsNumber(10);
         
     }
     
     
     // TODO do we need check sum?
-    public static long generateIMEI() {
-        return Long.decode(pickRandomElement(TACs) + randomNDigitsNumber(6) + "0");
+    public static String generateIMEI() {
+        return pickRandomElement(TACs) + randomNDigitsNumber(6) + "0";
     }
     
-    public static long generateMSISDN(CITY city) {
-        return Long.decode(USA_CC + pickRandomElement(city.ndcs) + randomNDigitsNumber(7));
+    public static String generateMSISDN(CITY city) {
+        return (USA_CC + pickRandomElement(city.ndcs) + randomNDigitsNumber(7));
         
     }
     
@@ -200,7 +201,7 @@ public class Utils {
         
         System.out.println(random.nextInt(0));
         //System.out.println("IMEI " +  generateIMEI());
-        //System.out.println("IMSI " + generateIMSI());
+        //System.out.println("IMSI " + generateMSIN());
         //System.out.println("MSISDN " + generateMSISDN());
     }
 }

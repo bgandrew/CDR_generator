@@ -36,9 +36,9 @@ import java.util.stream.Stream;
 public class Generator {
    
     private final static String[] CSV_HEADER = {
-    	"timestamp", "caller MSISDN", "caller IMEI", "caller IMSI", "caller cellID",
+    	"timestamp", "caller MSISDN", "caller IMEI", "caller IMSI", "caller LAC", "caller cellID",
     	"caller latitude", "caller longitude", "recipient MSISDN",
-    	"recipient IMEI", "recipient IMSI", "recepient cellID", "recipient latitude",
+    	"recipient IMEI", "recipient IMSI", "recepient LAC", "recepient cellID", "recipient latitude",
     	"recipient longitude", "type", "duration", "length" 
     };
     
@@ -67,12 +67,16 @@ public class Generator {
             for (String line : (Iterable<String>) lines::iterator) {
                 if (!line.startsWith("radio")) {
                     String[] values = line.split(",");
+                    int mcc = Integer.parseInt(values[1]);
+                    int mns = Integer.parseInt(values[2]);
+                    long lac = Long.parseLong(values[3]);
+                    int cellId = Integer.parseInt(values[4]);
                     double latitude = Double.parseDouble(values[7]);
                     double longitude = Double.parseDouble(values[6]);
-                    int cellId = Integer.parseInt(values[4]);
+                    
 
                   //  System.out.println("cellID: " + cellId + " , lat: " + latitude + " long: " + longitude);
-                    BTS bts = new BTS(latitude, longitude, cellId);
+                    BTS bts = new BTS(latitude, longitude, cellId, lac, mcc, mns);
 
                     for (CITY city : CITY.values()) {
                         if (city.contains(bts)) {
@@ -181,7 +185,7 @@ public class Generator {
             try( Stream<String> lines = Files.lines(Paths.get(OPENCELLID_FILE))) {
                 
                 for( String line : (Iterable<String>) lines::iterator ) { 
-                    if (!line.startsWith("radio")) {
+                    if (!line.startsWith("radio")&&!line.startsWith("sep")) { // TODO how to properly omit first two lines???
                         String[] values = line.split(",");
                         double latitude = Double.parseDouble(values[7]);
                         double longitude = Double.parseDouble(values[6]);
